@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Marco Hergi — I moved to NYC with almost nothing and documented the whole year. Free guides, real stories, and the tools I use to build." />
+  <meta property="og:title" content="Marco Hergi — NYC From Zero" />
+  <meta property="og:description" content="5 free guides from a year of building in NYC from scratch." />
+  <meta property="og:image" content="https://marccherggi.github.io/og-image.png" />
+  <title>Marco Hergi — NYC From Zero</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --black: #0a0a0a;
+      --white: #f5f5f0;
+      --accent: #e8ff4a;
+      --gray: #888;
+      --card-bg: #141414;
+    }
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* NAV */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid #1e1e1e;
+      position: sticky;
+      top: 0;
+      background: rgba(10,10,10,0.95);
+      backdrop-filter: blur(10px);
+      z-index: 100;
+    }
+    .logo { font-weight: 700; font-size: 1.1rem; letter-spacing: -0.02em; }
+    .logo span { color: var(--accent); }
+    nav a { color: var(--gray); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
+    nav a:hover { color: var(--white); }
+    .nav-links { display: flex; gap: 2rem; align-items: center; }
+    .nav-cta {
+      background: var(--accent);
+      color: var(--black) !important;
+      padding: 0.5rem 1.2rem;
+      border-radius: 100px;
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+
+    /* HERO */
+    .hero {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 6rem 2rem 4rem;
+      text-align: center;
+    }
+    .badge {
+      display: inline-block;
+      background: #1a1a1a;
+      border: 1px solid #333;
+      padding: 0.4rem 1rem;
+      border-radius: 100px;
+      font-size: 0.8rem;
+      color: var(--gray);
+      margin-bottom: 2rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .badge span { color: var(--accent); margin-right: 0.5rem; }
+    h1 {
+      font-size: clamp(2.5rem, 7vw, 5rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
+    }
+    h1 em { color: var(--accent); font-style: normal; }
+    .hero p {
+      font-size: 1.15rem;
+      color: var(--gray);
+      max-width: 560px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.7;
+    }
+    .hero-cta {
+      display: inline-flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: var(--black);
+      padding: 0.9rem 2rem;
+      border-radius: 100px;
+      font-weight: 700;
+      text-decoration: none;
+      font-size: 1rem;
+      transition: transform 0.15s, opacity 0.15s;
+    }
+    .btn-primary:hover { transform: translateY(-2px); opacity: 0.9; }
+    .btn-secondary {
+      background: transparent;
+      color: var(--white);
+      border: 1px solid #333;
+      padding: 0.9rem 2rem;
+      border-radius: 100px;
+      font-weight: 600;
+      text-decoration: none;
+      font-size: 1rem;
+      transition: border-color 0.2s;
+    }
+    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* STATS */
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 4rem;
+      padding: 3rem 2rem;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+      flex-wrap: wrap;
+    }
+    .stat { text-align: center; }
+    .stat-number { font-size: 2.5rem; font-weight: 800; color: var(--accent); letter-spacing: -0.03em; }
+    .stat-label { font-size: 0.85rem; color: var(--gray); margin-top: 0.25rem; }
+
+    /* STORY */
+    .story {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 5rem 2rem;
+    }
+    .section-tag {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+    .story h2 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+      line-height: 1.2;
+    }
+    .story p {
+      color: #aaa;
+      margin-bottom: 1.2rem;
+      font-size: 1.05rem;
+      line-height: 1.8;
+    }
+    .story strong { color: var(--white); }
+
+    /* GUIDES */
+    .guides {
+      background: #0d0d0d;
+      padding: 5rem 2rem;
+    }
+    .guides-inner { max-width: 1000px; margin: 0 auto; }
+    .guides h2 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+    .guides-subtitle {
+      text-align: center;
+      color: var(--gray);
+      margin-bottom: 3rem;
+      font-size: 1rem;
+    }
+    .guide-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+    .guide-card {
+      background: var(--card-bg);
+      border: 1px solid #222;
+      border-radius: 16px;
+      padding: 1.8rem;
+      text-decoration: none;
+      color: var(--white);
+      transition: border-color 0.2s, transform 0.15s;
+      display: block;
+    }
+    .guide-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+    .guide-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    .guide-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.5rem; line-height: 1.3; }
+    .guide-card p { font-size: 0.85rem; color: var(--gray); line-height: 1.5; }
+    .guide-free {
+      display: inline-block;
+      background: rgba(232, 255, 74, 0.1);
+      color: var(--accent);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.6rem;
+      border-radius: 100px;
+      margin-top: 1rem;
+    }
+    .guides-cta { text-align: center; }
+
+    /* TOOLS */
+    .tools {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 5rem 2rem;
+    }
+    .tools h2 {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+    .tools-subtitle { color: var(--gray); margin-bottom: 2.5rem; }
+    .tool-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.5rem;
+      padding: 1.5rem 0;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    .tool-item:last-child { border-bottom: none; }
+    .tool-number {
+      color: var(--accent);
+      font-size: 0.8rem;
+      font-weight: 700;
+      min-width: 24px;
+      padding-top: 0.15rem;
+    }
+    .tool-info h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.3rem; }
+    .tool-info p { font-size: 0.9rem; color: var(--gray); line-height: 1.5; }
+    .tool-link {
+      font-size: 0.8rem;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .tool-link:hover { text-decoration: underline; }
+
+    /* FOLLOW */
+    .follow {
+      background: #0d0d0d;
+      text-align: center;
+      padding: 5rem 2rem;
+    }
+    .follow h2 {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.75rem;
+    }
+    .follow p { color: var(--gray); margin-bottom: 2rem; font-size: 1rem; }
+    .social-links {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .social-btn {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      color: var(--white);
+      padding: 0.75rem 1.5rem;
+      border-radius: 100px;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .social-btn:hover { border-color: var(--accent); background: #222; }
+
+    /* FOOTER */
+    footer {
+      padding: 2rem;
+      text-align: center;
+      color: #444;
+      font-size: 0.8rem;
+      border-top: 1px solid #1a1a1a;
+    }
+    footer a { color: #555; text-decoration: none; }
+
+    @media (max-width: 600px) {
+      nav { padding: 1rem; }
+      .nav-links { gap: 1rem; }
+      h1 { font-size: 2.5rem; }
+      .stats { gap: 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="logo">marco<span>hergi</span></div>
+    <div class="nav-links">
+      <a href="#guides">Free Guides</a>
+      <a href="#tools">Tools</a>
+      <a href="https://www.instagram.com/marcohergi/" target="_blank" class="nav-cta">Follow Along</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="badge"><span>🎬</span> NYC from zero — documented</div>
+    <h1>I moved to NYC<br>with <em>almost nothing</em>.<br>Here's what happened.</h1>
+    <p>Worked restaurants. Hit zero dollars. Sold my own stuff. Found a way back up. I documented the whole year — and built free guides from everything I learned.</p>
+    <div class="hero-cta">
+      <a href="#guides" class="btn-primary">Get the Free Guides →</a>
+      <a href="https://www.instagram.com/marcohergi/" target="_blank" class="btn-secondary">Watch the Story</a>
+    </div>
+  </section>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-number">1yr</div>
+      <div class="stat-label">documented in NYC</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">$0</div>
+      <div class="stat-label">lowest point hit</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">5</div>
+      <div class="stat-label">free guides from it</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">100%</div>
+      <div class="stat-label">real story</div>
+    </div>
+  </div>
+
+  <section class="story">
+    <div class="section-tag">The Story</div>
+    <h2>This isn't a highlight reel.</h2>
+    <p>I moved to New York City and spent a full year building a life from scratch — on camera. No safety net. No connections. I'm talking <strong>restaurant jobs, poker, side hustles, debt, zero dollars, selling my own stuff, repairing PCs, grinding back up.</strong></p>
+    <p>I'm turning that year into a content series. Real footage. Real failures. Real pivots. The episodes are coming — follow on Instagram to watch as they drop.</p>
+    <p>In the meantime, I turned everything I learned into <strong>5 free guides</strong>. The things I wish someone had told me when I first landed here.</p>
+  </section>
+
+  <section class="guides" id="guides">
+    <div class="guides-inner">
+      <div class="section-tag" style="text-align:center">Free Resources</div>
+      <h2>5 Free NYC Guides</h2>
+      <p class="guides-subtitle">Built from a year of figuring it out. No email required.</p>
+      <div class="guide-grid">
+        <a href="https://marconyc.gumroad.com" target="_blank" class="guide-card">
+          <div class="guide-icon">🏠</div>
+          <h3>NYC Apartment Hunt Cheatsheet</h3>
+          <p>Real costs, best sites, red flags, and neighborhoods ranked. What they don't tell you upfront.</p>
+          <span class="guide-free">Free Download</span>
+        </a>
+        <a href="https://marconyc.gumroad.com" target="_blank" class="guide-card">
+          <div class="guide-icon">📋</div>
+          <h3>Your First Week in NYC: Survival Guide</h3>
+          <p>Day 1–2 checklist, real budget benchmark, cheap food spots, and how to meet people fast.</p>
+          <span class="guide-free">Free Download</span>
+        </a>
+        <a href="https://marconyc.gumroad.com" target="_blank" class="guide-card">
+          <div class="guide-icon">💵</div>
+          <h3>Living in NYC on $1,500/Month</h3>
+          <p>The actual budget breakdown. Where to find under-$900 rooms. What to cut. How to make it work.</p>
+          <span class="guide-free">Free Download</span>
+        </a>
+        <a href="https://marconyc.gumroad.com" target="_blank" class="guide-card">
+          <div class="guide-icon">💼</div>
+          <h3>First Job in NYC (From Zero)</h3>
+          <p>Fastest paths to income, the cold walk-in script that got me hired, salary ranges by role.</p>
+          <span class="guide-free">Free Download</span>
+        </a>
+        <a href="https://marconyc.gumroad.com" target="_blank" class="guide-card">
+          <div class="guide-icon">⚡</div>
+          <h3>The NYC Side Hustle Playbook</h3>
+          <p>TaskRabbit, gig apps, content creation, freelance — ranked by speed to first dollar.</p>
+          <span class="guide-free">Free Download</span>
+        </a>
+      </div>
+      <div class="guides-cta">
+        <a href="https://marconyc.gumroad.com" target="_blank" class="btn-primary">Get All 5 Free Guides →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="tools" id="tools">
+    <div class="section-tag">Tools I Actually Use</div>
+    <h2>The stack that runs my content operation</h2>
+    <p class="tools-subtitle">I only recommend what I use daily. These pay for themselves.</p>
+
+    <div class="tool-item">
+      <div class="tool-number">01</div>
+      <div class="tool-info">
+        <h3>ElevenLabs — AI Voice & Audio</h3>
+        <p>I use this for voiceovers on every Reel. Type the script, pick the voice, done in 60 seconds. The free tier is genuinely useful. Cloned my own voice for consistent narration.</p>
+        <a href="https://try.elevenlabs.io/u977oq1o3fc0" target="_blank" class="tool-link">Try it free → elevenlabs.io</a>
+      </div>
+    </div>
+
+    <div class="tool-item">
+      <div class="tool-number">02</div>
+      <div class="tool-info">
+        <h3>Claude — AI Scripting & Research</h3>
+        <p>Every script, caption, outline, and research task runs through Claude. Faster and better than doing it manually. Cuts my content planning time by 70%.</p>
+      </div>
+    </div>
+
+    <div class="tool-item">
+      <div class="tool-number">03</div>
+      <div class="tool-info">
+        <h3>CapCut — Video Editing</h3>
+        <p>Free, fast, mobile-first. Auto-captions work well. I edit every Reel here. No desktop required.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="follow">
+    <div class="section-tag">Follow the Story</div>
+    <h2>Watch the year unfold.</h2>
+    <p>Episodes dropping on Instagram and YouTube. NYC from zero — the real version.</p>
+    <div class="social-links">
+      <a href="https://www.instagram.com/marcohergi/" target="_blank" class="social-btn">📸 Instagram @marcohergi</a>
+      <a href="https://marconyc.gumroad.com" target="_blank" class="social-btn">📚 Free Guides</a>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2026 Marco Hergi · <a href="https://www.instagram.com/marcohergi/">@marcohergi</a> · Built in NYC</p>
+  </footer>
+
+</body>
+</html>
