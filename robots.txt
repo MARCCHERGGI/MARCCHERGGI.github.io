@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://marccherggi.github.io/sitemap.xml
