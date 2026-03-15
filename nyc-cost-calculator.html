@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Free NYC Cost of Living Calculator — see exactly what you need to earn to live in New York City. Real numbers by neighborhood and lifestyle." />
+  <meta property="og:title" content="NYC Cost of Living Calculator — What Do You Actually Need?" />
+  <meta property="og:description" content="Enter your lifestyle. Get your real NYC number. Built from lived experience, not averages." />
+  <title>NYC Cost of Living Calculator — Marco Hergi</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{background:#0a0a0a;color:#f5f5f0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;line-height:1.6}
+    nav{display:flex;justify-content:space-between;align-items:center;padding:1.5rem 2rem;border-bottom:1px solid #1e1e1e;position:sticky;top:0;background:rgba(10,10,10,.95);backdrop-filter:blur(10px);z-index:100}
+    .logo{font-weight:700;font-size:1.1rem}.logo span{color:#e8ff4a}
+    nav a{color:#888;text-decoration:none;font-size:.9rem}
+    .hero{max-width:800px;margin:0 auto;padding:4rem 2rem 2rem;text-align:center}
+    .tag{font-size:.75rem;text-transform:uppercase;letter-spacing:.1em;color:#e8ff4a;margin-bottom:1rem}
+    h1{font-size:2.8rem;font-weight:800;letter-spacing:-.03em;line-height:1.15;margin-bottom:1rem}
+    .subtitle{color:#888;font-size:1.05rem;max-width:520px;margin:0 auto 2.5rem}
+    .calculator{max-width:720px;margin:0 auto;padding:0 2rem 4rem}
+    .section{background:#141414;border:1px solid #222;border-radius:16px;padding:2rem;margin-bottom:1.5rem}
+    .section h2{font-size:1rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#e8ff4a;margin-bottom:1.5rem}
+    .row{display:flex;justify-content:space-between;align-items:center;padding:.75rem 0;border-bottom:1px solid #1a1a1a}
+    .row:last-child{border-bottom:none}
+    .row label{font-size:.95rem;color:#ccc;flex:1}
+    .row-value{font-size:.9rem;color:#e8ff4a;font-weight:700;min-width:80px;text-align:right;margin-right:1rem}
+    select,input[type=range]{background:#0a0a0a;border:1px solid #333;color:#f5f5f0;padding:.4rem .8rem;border-radius:8px;font-size:.9rem;outline:none;cursor:pointer}
+    input[type=range]{-webkit-appearance:none;height:4px;border-radius:2px;background:#333;border:none;padding:0;width:160px;cursor:pointer}
+    input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:#e8ff4a;cursor:pointer}
+    .result{background:linear-gradient(135deg,#141414,#1a1a0a);border:1px solid #e8ff4a;border-radius:20px;padding:2.5rem;text-align:center;margin-bottom:1.5rem}
+    .result-label{font-size:.85rem;text-transform:uppercase;letter-spacing:.1em;color:#888;margin-bottom:.5rem}
+    .result-number{font-size:4rem;font-weight:800;color:#e8ff4a;letter-spacing:-.04em;line-height:1}
+    .result-sub{color:#888;font-size:.9rem;margin-top:.75rem}
+    .breakdown{background:#141414;border:1px solid #222;border-radius:16px;padding:1.5rem;margin-bottom:1.5rem}
+    .breakdown h3{font-size:.85rem;text-transform:uppercase;letter-spacing:.08em;color:#888;margin-bottom:1rem}
+    .b-row{display:flex;justify-content:space-between;padding:.5rem 0;border-bottom:1px solid #1a1a1a;font-size:.9rem}
+    .b-row:last-child{border-bottom:none;font-weight:700;color:#f5f5f0;padding-top:.75rem}
+    .b-row span:first-child{color:#bbb}
+    .b-row span:last-child{color:#f5f5f0}
+    .verdict{border-radius:12px;padding:1.25rem 1.5rem;margin-bottom:1rem;font-size:.95rem}
+    .verdict.tight{background:rgba(255,80,80,.08);border:1px solid rgba(255,80,80,.2);color:#ff8080}
+    .verdict.doable{background:rgba(255,200,0,.08);border:1px solid rgba(255,200,0,.2);color:#ffc800}
+    .verdict.comfortable{background:rgba(74,255,128,.08);border:1px solid rgba(74,255,128,.2);color:#4aff80}
+    .cta-box{background:#0d0d0d;border:1px solid #333;border-radius:16px;padding:2rem;text-align:center}
+    .cta-box p{color:#888;margin-bottom:1rem;font-size:.95rem}
+    .btn{display:inline-block;background:#e8ff4a;color:#0a0a0a;padding:.9rem 2rem;border-radius:100px;font-weight:700;text-decoration:none;font-size:1rem;margin:.25rem}
+    .btn-sec{background:#1a1a1a;color:#f5f5f0;border:1px solid #333}
+    footer{padding:2rem;text-align:center;color:#444;font-size:.8rem;border-top:1px solid #1a1a1a}
+    footer a{color:#555;text-decoration:none}
+    @media(max-width:600px){h1{font-size:2rem}.row{flex-wrap:wrap;gap:.5rem}.row-value{min-width:auto}.result-number{font-size:3rem}}
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/" class="logo">marco<span>hergi</span></a>
+    <a href="https://www.instagram.com/marcohergi/" target="_blank">@marcohergi</a>
+  </nav>
+
+  <div class="hero">
+    <div class="tag">Free Tool</div>
+    <h1>What Do You Actually Need<br>to Live in NYC?</h1>
+    <p class="subtitle">Not the averages. Not what the internet says. The real number — based on how you actually want to live.</p>
+  </div>
+
+  <div class="calculator">
+
+    <!-- RESULT -->
+    <div class="result">
+      <div class="result-label">You need to earn at least</div>
+      <div class="result-number" id="result">$0</div>
+      <div class="result-sub" id="result-sub">per month to cover your choices below</div>
+    </div>
+
+    <div class="verdict" id="verdict"></div>
+
+    <!-- HOUSING -->
+    <div class="section">
+      <h2>🏠 Housing</h2>
+      <div class="row">
+        <label>Living situation</label>
+        <select id="housing" onchange="calc()">
+          <option value="700">Shared room, outer borough ($700)</option>
+          <option value="900" selected>Private room, outer borough ($900)</option>
+          <option value="1200">Private room, Brooklyn/Queens ($1,200)</option>
+          <option value="1600">Studio apartment, outer borough ($1,600)</option>
+          <option value="2200">Studio apartment, Manhattan ($2,200)</option>
+          <option value="3000">1BR apartment, Manhattan ($3,000)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- TRANSPORT -->
+    <div class="section">
+      <h2>🚇 Transportation</h2>
+      <div class="row">
+        <label>Getting around</label>
+        <select id="transport" onchange="calc()">
+          <option value="0">Walk everywhere (free)</option>
+          <option value="132" selected>MetroCard unlimited ($132/mo)</option>
+          <option value="132">MetroCard + occasional Uber ($180/mo)</option>
+          <option value="250">MetroCard + frequent Uber ($250/mo)</option>
+          <option value="400">Car (insurance, parking, gas: $400+)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- FOOD -->
+    <div class="section">
+      <h2>🍕 Food</h2>
+      <div class="row">
+        <label>Eating style</label>
+        <select id="food" onchange="calc()">
+          <option value="150">Cook almost everything ($150)</option>
+          <option value="250" selected>Cook + eat out 2-3x/week ($250)</option>
+          <option value="400">Eat out most meals ($400)</option>
+          <option value="600">Restaurants + delivery often ($600)</option>
+          <option value="900">Eat out daily, good restaurants ($900)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- LIFESTYLE -->
+    <div class="section">
+      <h2>🎉 Lifestyle</h2>
+      <div class="row">
+        <label>Going out (bars, concerts, events)</label>
+        <select id="going-out" onchange="calc()">
+          <option value="0">Almost never ($0)</option>
+          <option value="100" selected>Occasionally ($100/mo)</option>
+          <option value="250">Weekends out ($250/mo)</option>
+          <option value="500">Active nightlife ($500/mo)</option>
+        </select>
+      </div>
+      <div class="row">
+        <label>Gym / fitness</label>
+        <select id="gym" onchange="calc()">
+          <option value="0">Parks and free (free)</option>
+          <option value="30" selected>Budget gym / Planet Fitness ($30)</option>
+          <option value="80">Mid-range gym ($80)</option>
+          <option value="200">Premium gym / classes ($200)</option>
+        </select>
+      </div>
+      <div class="row">
+        <label>Subscriptions (Netflix, Spotify, etc.)</label>
+        <select id="subs" onchange="calc()">
+          <option value="0">None / shared ($0)</option>
+          <option value="30" selected>Basic (Netflix + Spotify: $30)</option>
+          <option value="60">Standard stack ($60)</option>
+          <option value="100">Everything ($100)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- PHONE -->
+    <div class="section">
+      <h2>📱 Phone</h2>
+      <div class="row">
+        <label>Monthly phone plan</label>
+        <select id="phone" onchange="calc()">
+          <option value="15">Mint Mobile basic ($15)</option>
+          <option value="35" selected>Mint Mobile standard ($35)</option>
+          <option value="60">T-Mobile / Verizon ($60)</option>
+          <option value="90">Premium carrier ($90)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- SAVINGS -->
+    <div class="section">
+      <h2>💰 Savings Goal</h2>
+      <div class="row">
+        <label>Monthly savings target</label>
+        <div class="row-value" id="savings-value">$200</div>
+        <input type="range" id="savings" min="0" max="1500" step="50" value="200" oninput="updateSavings(); calc()" />
+      </div>
+    </div>
+
+    <!-- BREAKDOWN -->
+    <div class="breakdown" id="breakdown">
+      <h3>Your Monthly Breakdown</h3>
+    </div>
+
+    <div class="cta-box">
+      <p>I built this from real experience living in NYC. Get the full guides on apartment hunting, budgeting, finding your first job, and side hustles — all free.</p>
+      <a href="https://marconyc.gumroad.com" target="_blank" class="btn">Get the Free Guides →</a>
+      <a href="https://www.instagram.com/marcohergi/" target="_blank" class="btn btn-sec">Follow @marcohergi</a>
+    </div>
+
+  </div>
+
+  <footer>© 2026 Marco Hergi · <a href="/">marccherggi.github.io</a> · <a href="https://www.instagram.com/marcohergi/">@marcohergi</a></footer>
+
+  <script>
+    function updateSavings() {
+      document.getElementById('savings-value').textContent = '$' + document.getElementById('savings').value;
+    }
+
+    function getVal(id) {
+      return parseInt(document.getElementById(id).value) || 0;
+    }
+
+    function calc() {
+      const housing = getVal('housing');
+      const transport = getVal('transport') || 132;
+      const food = getVal('food');
+      const goingOut = getVal('going-out');
+      const gym = getVal('gym');
+      const subs = getVal('subs');
+      const phone = getVal('phone');
+      const savings = getVal('savings');
+      const misc = 100; // always include misc buffer
+
+      const total = housing + transport + food + goingOut + gym + subs + phone + savings + misc;
+
+      // Display result
+      document.getElementById('result').textContent = '$' + total.toLocaleString();
+      document.getElementById('result-sub').textContent = 'per month · $' + Math.round(total * 12).toLocaleString() + '/year';
+
+      // Verdict
+      const verdictEl = document.getElementById('verdict');
+      const hourlyNeeded = Math.round((total / 4.33) / 40);
+      if (total < 1800) {
+        verdictEl.className = 'verdict tight';
+        verdictEl.innerHTML = `⚡ <strong>Survival mode.</strong> Possible if you hustle — restaurant server tips + gig work can cover this. Hourly equivalent: ~$${hourlyNeeded}/hr.`;
+      } else if (total < 3000) {
+        verdictEl.className = 'verdict doable';
+        verdictEl.innerHTML = `📍 <strong>Doable.</strong> A solid restaurant job or entry-level salary gets you here. You'll be tight but stable. Hourly equivalent: ~$${hourlyNeeded}/hr.`;
+      } else if (total < 5000) {
+        verdictEl.className = 'verdict comfortable';
+        verdictEl.innerHTML = `✅ <strong>Comfortable.</strong> Mid-level salary or two income streams. You'll have room to breathe. Hourly equivalent: ~$${hourlyNeeded}/hr.`;
+      } else {
+        verdictEl.className = 'verdict comfortable';
+        verdictEl.innerHTML = `🏆 <strong>Living well.</strong> You're not in survival mode. Build wealth at this level. Hourly equivalent: ~$${hourlyNeeded}/hr.`;
+      }
+
+      // Breakdown
+      const items = [
+        ['Rent / Housing', housing],
+        ['Transportation', transport],
+        ['Food & Groceries', food],
+        ['Going Out', goingOut],
+        ['Gym / Fitness', gym],
+        ['Subscriptions', subs],
+        ['Phone', phone],
+        ['Misc / Buffer', misc],
+        ['Savings', savings],
+      ].filter(([_, v]) => v > 0);
+
+      const breakdownEl = document.getElementById('breakdown');
+      breakdownEl.innerHTML = '<h3>Your Monthly Breakdown</h3>' +
+        items.map(([k, v]) => `<div class="b-row"><span>${k}</span><span>$${v.toLocaleString()}</span></div>`).join('') +
+        `<div class="b-row"><span>Total Monthly</span><span>$${total.toLocaleString()}</span></div>`;
+    }
+
+    // Init
+    calc();
+  </script>
+</body>
+</html>
