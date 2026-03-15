@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Live Trading Signals | AI Swarm | Marco NYC</title>
+<meta name="description" content="Real-time trading signals from a 6-agent AI swarm. Updated every 30 minutes during market hours.">
+<link rel="icon" href="/favicon.ico">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Courier New',monospace;background:#050a0f;color:#00ff88;min-height:100vh}
+header{padding:20px 24px;border-bottom:1px solid #0f2a1a;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+header h1{font-size:1.1rem;font-weight:700;letter-spacing:2px}
+.badge{font-size:.75rem;padding:4px 10px;border-radius:3px;border:1px solid #00ff88;color:#00ff88}
+.badge.live{animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.updated{font-size:.7rem;color:#447755;margin-top:4px}
+.table-wrap{overflow-x:auto;padding:20px}
+table{width:100%;border-collapse:collapse;min-width:600px}
+th{font-size:.7rem;letter-spacing:2px;color:#447755;padding:8px 12px;border-bottom:1px solid #0f2a1a;text-align:left}
+td{padding:12px;border-bottom:1px solid #051510;font-size:.9rem}
+tr:hover td{background:#051510}
+.buy{color:#00ff88;font-weight:700}.sell{color:#ff4466;font-weight:700}.hold{color:#667777}
+.bar{height:6px;border-radius:3px;display:inline-block;vertical-align:middle;margin-left:8px}
+.buy-bar{background:#00ff88}.sell-bar{background:#ff4466}.hold-bar{background:#334}
+.agents{font-size:.7rem;color:#334;letter-spacing:1px}
+.agents span{display:inline-block;width:20px;text-align:center}
+.agent-buy{color:#00ff88}.agent-sell{color:#ff4466}.agent-hold{color:#667777}
+.footer{padding:20px 24px;border-top:1px solid #0f2a1a;font-size:.7rem;color:#334;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.footer a{color:#00aa55;text-decoration:none}
+.loading{padding:40px;text-align:center;color:#334}
+</style>
+</head>
+<body>
+<header>
+<div>
+<h1>◈ SWARM SIGNALS</h1>
+<div class="updated" id="updated">loading...</div>
+</div>
+<div>
+<span class="badge live">● LIVE</span>
+<div class="updated">6 agents · 30min scan · market hours</div>
+</div>
+</header>
+<div class="table-wrap">
+<table id="signals-table">
+<thead><tr><th>TICKER</th><th>PRICE</th><th>ACTION</th><th>CONSENSUS</th><th>CONFIDENCE</th><th>AGENTS (S R M B V C)</th></tr></thead>
+<tbody id="tbody"><tr><td colspan="6" class="loading">Loading signals...</td></tr></tbody>
+</table>
+</div>
+<div class="footer">
+<span>Built by <a href="https://instagram.com/marcohergi">@marcohergi</a> in NYC</span>
+<span><a href="https://github.com/MARCCHERGGI/trading-swarm">GitHub</a> · <a href="https://marccherggi.github.io">marccherggi.github.io</a></span>
+</div>
+<script>
+async function load() {
+  try {
+    const r = await fetch('/signals.json?t=' + Date.now());
+    const data = await r.json();
+    document.getElementById('updated').textContent = 'Updated: ' + new Date(data.updated).toLocaleTimeString() + ' · ' + data.total_logged + ' signals logged';
+    const tbody = document.getElementById('tbody');
+    if (!data.signals || !data.signals.length) { tbody.innerHTML = '<tr><td colspan="6" class="loading">No signals yet — market may be closed</td></tr>'; return; }
+    const sorted = [...data.signals].sort((a,b) => parseFloat(b.consensus) - parseFloat(a.consensus));
+    tbody.innerHTML = sorted.map(s => {
+      const c = parseFloat(s.consensus);
+      const cls = s.action === 'BUY' ? 'buy' : s.action === 'SELL' ? 'sell' : 'hold';
+      const barCls = s.action === 'BUY' ? 'buy-bar' : s.action === 'SELL' ? 'sell-bar' : 'hold-bar';
+      const barW = Math.abs(c) * 60;
+      const agents = [s.sma, s.rsi, s.momentum, s.bollinger, s.volume, s.macd].map(v => {
+        const vc = parseInt(v) > 0 ? 'agent-buy' : parseInt(v) < 0 ? 'agent-sell' : 'agent-hold';
+        const sym = parseInt(v) > 0 ? '+' : parseInt(v) < 0 ? '−' : '○';
+        return '<span class="' + vc + '">' + sym + '</span>';
+      }).join('');
+      return '<tr><td><strong>' + s.ticker + '</strong></td><td>$' + parseFloat(s.price).toFixed(2) + '</td><td class="' + cls + '">' + s.action + '</td><td class="' + cls + '">' + (c > 0 ? '+' : '') + c.toFixed(3) + '<span class="bar ' + barCls + '" style="width:' + barW + 'px"></span></td><td>' + (parseFloat(s.confidence)*100).toFixed(0) + '%</td><td class="agents">' + agents + '</td></tr>';
+    }).join('');
+  } catch(e) { document.getElementById('tbody').innerHTML = '<tr><td colspan="6" class="loading">Error loading signals</td></tr>'; }
+}
+load();
+setInterval(load, 30000);
+</script>
+</body>
+</html>
