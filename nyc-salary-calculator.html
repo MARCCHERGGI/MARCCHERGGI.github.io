@@ -1,0 +1,134 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NYC Salary Calculator 2026 — What Should You Be Making? | Marco NYC</title>
+<meta name="description" content="Find out what salary you should be making in NYC based on your role, experience, and neighborhood. Real 2026 numbers.">
+<meta property="og:title" content="NYC Salary Calculator 2026 — Am I Underpaid?">
+<meta property="og:image" content="https://marccherggi.github.io/og/home.png">
+<link rel="icon" href="/favicon.ico">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,sans-serif;background:#0f172a;color:#e2e8f0;min-height:100vh;padding:0 20px}
+.container{max-width:680px;margin:0 auto;padding:50px 0}
+h1{font-size:clamp(1.6rem,4vw,2.4rem);font-weight:900;background:linear-gradient(135deg,#60a5fa,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:10px}
+.sub{color:#64748b;margin-bottom:40px}
+.form{background:#020617;border:1px solid #1e293b;border-radius:16px;padding:32px}
+label{display:block;font-size:.8rem;color:#64748b;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;margin-top:20px}
+label:first-child{margin-top:0}
+select,input{width:100%;padding:12px 16px;background:#0f172a;border:1px solid #1e293b;border-radius:8px;color:#e2e8f0;font-size:.95rem;outline:none;appearance:none}
+select:focus,input:focus{border-color:#3b82f6}
+.btn{width:100%;padding:16px;background:linear-gradient(135deg,#3b82f6,#8b5cf6);color:white;border:none;border-radius:8px;font-weight:700;font-size:1rem;cursor:pointer;margin-top:24px;transition:opacity .2s}
+.btn:hover{opacity:.9}
+.result{margin-top:32px;padding:28px;background:#020617;border:1px solid #1e293b;border-radius:12px;display:none}
+.result.show{display:block}
+.result h2{font-size:1.1rem;color:#94a3b8;margin-bottom:16px}
+.range{font-size:2.8rem;font-weight:900;color:#22c55e;line-height:1}
+.verdict{padding:16px;border-radius:8px;margin-top:20px;font-size:.9rem}
+.verdict.ok{background:#052e16;border:1px solid #166534;color:#4ade80}
+.verdict.low{background:#450a0a;border:1px solid #991b1b;color:#fca5a5}
+.verdict.high{background:#1e3a5f;border:1px solid #1d4ed8;color:#93c5fd}
+.breakdown{margin-top:20px}
+.breakdown-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #0f172a;font-size:.85rem}
+.breakdown-row .val{font-weight:600;color:#e2e8f0}
+footer{text-align:center;padding:40px 0 20px;color:#334155;font-size:.8rem}
+footer a{color:#60a5fa;text-decoration:none}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>NYC Salary Calculator</h1>
+<p class="sub">Are you being underpaid? Enter your role and situation — get a real NYC market range for 2026.</p>
+<div class="form">
+  <label>Your Role</label>
+  <select id="role">
+    <option value="software-engineer">Software Engineer</option>
+    <option value="product-manager">Product Manager</option>
+    <option value="data-analyst">Data Analyst</option>
+    <option value="ai-ml-engineer">AI/ML Engineer</option>
+    <option value="content-creator">Content Creator</option>
+    <option value="bartender">Bartender</option>
+    <option value="server">Server/Waiter</option>
+    <option value="barista">Barista</option>
+    <option value="delivery">Delivery Driver</option>
+    <option value="retail">Retail Associate</option>
+    <option value="freelance-writer">Freelance Writer</option>
+    <option value="graphic-designer">Graphic Designer</option>
+    <option value="marketing">Marketing Manager</option>
+    <option value="sales">Sales Representative</option>
+    <option value="social-media">Social Media Manager</option>
+  </select>
+  <label>Years of Experience</label>
+  <select id="experience">
+    <option value="0">0-1 years (entry)</option>
+    <option value="1">1-3 years</option>
+    <option value="2">3-5 years</option>
+    <option value="3">5-10 years</option>
+    <option value="4">10+ years</option>
+  </select>
+  <label>Your Current Salary (optional)</label>
+  <input type="number" id="current" placeholder="e.g. 75000" min="0">
+  <button class="btn" onclick="calculate()">Calculate My Market Rate</button>
+</div>
+<div id="result" class="result">
+  <h2>2026 NYC Market Rate for <span id="role-label"></span></h2>
+  <div id="range" class="range"></div>
+  <div id="verdict" class="verdict"></div>
+  <div class="breakdown" id="breakdown"></div>
+</div>
+<footer>By <a href="https://instagram.com/marcohergi">@marcohergi</a> · <a href="/nyc-salary-guide.html">Full NYC Salary Guide</a> · <a href="/">All Guides</a></footer>
+</div>
+<script>
+const data = {
+  "software-engineer": {name:"Software Engineer",ranges:[[80,120],[100,150],[140,200],[180,280],[220,400]],tips:"Remote-first companies pay NYC rates without requiring office. Your base + RSUs can 2-3x your cash comp."},
+  "ai-ml-engineer": {name:"AI/ML Engineer",ranges:[[100,150],[130,180],[160,250],[200,320],[260,500]],tips:"Highest-growth role in 2026. Even without a PhD, strong portfolio projects beat credentials."},
+  "product-manager": {name:"Product Manager",ranges:[[85,120],[110,160],[140,200],[170,250],[200,350]],tips:"APMs at big tech (Google, Meta, Amazon) get $150k+ entry. Startups pay lower base but equity."},
+  "data-analyst": {name:"Data Analyst",ranges:[[65,90],[80,110],[95,140],[120,170],[145,220]],tips:"SQL + Python + one viz tool (Tableau/Looker) is the NYC baseline. Data Science roles pay 20-30% more."},
+  "content-creator": {name:"Content Creator",ranges:[[20,40],[30,70],[50,120],[80,200],[120,400]],tips:"Typical values in thousands/year. Brand deals, courses, and affiliate > AdSense. Build email list first."},
+  "bartender": {name:"Bartender",ranges:[[45,75],[55,90],[65,110],[75,130],[85,150]],tips:"Weekend nights in Manhattan. Hotels pay steady base + tips. High-end cocktail bars can 2x this."},
+  "server": {name:"Server",ranges:[[40,70],[50,85],[60,100],[70,120],[80,130]],tips:"Fine dining in Manhattan tops this range. Lunch shifts pay significantly less than dinner."},
+  "barista": {name:"Barista",ranges:[[35,50],[40,55],[45,60],[50,65],[55,70]],tips:"Base is low but specialty coffee shops tip well in Manhattan. Night/early AM shifts pay premium."},
+  "delivery": {name:"Delivery Driver",ranges:[[40,60],[45,70],[50,80],[55,85],[60,90]],tips:"Manhattan lunch/dinner rush is where the money is. Electric bike pays for itself in 6 weeks."},
+  "retail": {name:"Retail Associate",ranges:[[35,48],[40,55],[45,62],[50,70],[55,80]],tips:"Luxury retail (Fifth Ave) pays 20-40% more plus commission. Store management adds $15-30k."},
+  "freelance-writer": {name:"Freelance Writer",ranges:[[25,50],[35,70],[50,100],[70,150],[90,200]],tips:"B2B tech writing pays 3x consumer content. White papers and case studies: $1-3k each."},
+  "graphic-designer": {name:"Graphic Designer",ranges:[[50,75],[60,90],[75,110],[95,140],[120,180]],tips:"Agencies vs in-house: agencies pay less but teach faster. UI/UX premium over pure graphic design."},
+  "marketing": {name:"Marketing Manager",ranges:[[65,95],[80,115],[95,140],[120,175],[150,220]],tips:"Performance/growth marketing pays 20-30% premium over brand/content roles."},
+  "sales": {name:"Sales Representative",ranges:[[50,80],[65,110],[85,160],[110,220],[140,300]],tips:"OTE (base + commission) is what matters. SaaS sales in NYC: $80-120k base, $160-250k OTE."},
+  "social-media": {name:"Social Media Manager",ranges:[[45,65],[55,80],[65,100],[80,130],[100,160]],tips:"In-house vs agency: agencies teach more. Creator economy roles (working with influencers) pay more."},
+};
+
+function calculate() {
+  const role = document.getElementById('role').value;
+  const exp = parseInt(document.getElementById('experience').value);
+  const current = parseInt(document.getElementById('current').value) || 0;
+  const d = data[role];
+  const [lo, hi] = d.ranges[exp];
+  const mid = Math.round((lo + hi) / 2);
+  
+  document.getElementById('role-label').textContent = d.name;
+  document.getElementById('range').textContent = `$${lo}k — $${hi}k`;
+  
+  const verdict = document.getElementById('verdict');
+  let vtext = '', vcls = '';
+  if (current > 0) {
+    const c = current / 1000;
+    if (c < lo * 0.9) { vtext = `You're earning $${current.toLocaleString()} — likely ${Math.round((mid*1000-current)/current*100)}% below market. Time to negotiate or switch.`; vcls = 'low'; }
+    else if (c > hi * 1.1) { vtext = `You're earning $${current.toLocaleString()} — above market range. Strong position.`; vcls = 'high'; }
+    else { vtext = `You're earning $${current.toLocaleString()} — within NYC market range for your role.`; vcls = 'ok'; }
+  } else {
+    vtext = `NYC market range: $${lo}k–$${hi}k. ${d.tips}`; vcls = 'ok';
+  }
+  verdict.className = 'verdict ' + vcls;
+  verdict.textContent = vtext;
+  
+  document.getElementById('breakdown').innerHTML = `
+    <div class="breakdown-row"><span>Entry-level (0-1yr)</span><span class="val">$${d.ranges[0][0]}k–$${d.ranges[0][1]}k</span></div>
+    <div class="breakdown-row"><span>Mid-level (3-5yr)</span><span class="val">$${d.ranges[2][0]}k–$${d.ranges[2][1]}k</span></div>
+    <div class="breakdown-row"><span>Senior (5-10yr)</span><span class="val">$${d.ranges[3][0]}k–$${d.ranges[3][1]}k</span></div>
+    <div class="breakdown-row"><span style="color:#64748b">Tip</span><span class="val" style="color:#64748b;text-align:right;max-width:400px">${d.tips}</span></div>`;
+  
+  document.getElementById('result').className = 'result show';
+}
+</script>
+</body>
+</html>
